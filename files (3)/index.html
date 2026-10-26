@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cutout – remove image backgrounds</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="top">
+    <h1>Cutout</h1>
+    <p>Remove the background from a photo. Your image is processed on this computer and never leaves it.</p>
+  </header>
+
+  <main>
+    <section id="drop" class="drop" tabindex="0" role="button" aria-label="Choose an image to upload">
+      <input id="file" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+      <p class="drop-title">Drop a photo here</p>
+      <p class="drop-sub">Click to choose a file, or paste one with Ctrl+V. JPG, PNG or WebP, up to {{ max_mb }} MB.</p>
+    </section>
+
+    <p id="error" class="error" role="alert" hidden></p>
+
+    <section id="workspace" class="workspace" hidden>
+      <div class="stage">
+        <div id="compare" class="compare checker">
+          <img id="resultImg" alt="Image with background removed">
+          <img id="origImg" class="orig" alt="Original image">
+          <div id="handle" class="handle" aria-hidden="true"><span></span></div>
+          <input id="split" class="split" type="range" min="0" max="100" value="50"
+                 aria-label="Compare original (left) and result (right)">
+          <div id="busy" class="busy" hidden>
+            <div class="spinner"></div>
+            <p>Removing background…</p>
+          </div>
+        </div>
+        <p class="hint">Drag across the image to compare the original with the cutout.</p>
+      </div>
+
+      <aside class="panel">
+        <div class="group">
+          <label for="model">Cutout style</label>
+          <select id="model">
+            <option value="general">General (best quality)</option>
+            <option value="portrait">People</option>
+            <option value="fast">Fast</option>
+          </select>
+        </div>
+
+        <div class="group">
+          <span class="label" id="bgLabel">Background</span>
+          <div class="swatches" role="group" aria-labelledby="bgLabel">
+            <button class="swatch checker active" data-bg="transparent" title="Transparent" aria-label="Transparent"></button>
+            <button class="swatch" data-bg="#ffffff" style="background:#fff" title="White" aria-label="White"></button>
+            <button class="swatch" data-bg="#17202a" style="background:#17202a" title="Black" aria-label="Black"></button>
+            <button class="swatch" data-bg="#2b50f0" style="background:#2b50f0" title="Blue" aria-label="Blue"></button>
+            <button class="swatch" data-bg="#ffd23f" style="background:#ffd23f" title="Yellow" aria-label="Yellow"></button>
+            <label class="swatch custom" title="Pick a colour">
+              <input id="colorPick" type="color" value="#9be7c4" aria-label="Pick a custom colour">
+            </label>
+          </div>
+          <button id="bgImageBtn" class="link" type="button">Use an image as background</button>
+          <input id="bgImageFile" type="file" accept="image/*" hidden>
+        </div>
+
+        <div class="actions">
+          <button id="download" class="primary" type="button" disabled>Download PNG</button>
+          <button id="reset" class="secondary" type="button">Start over</button>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
